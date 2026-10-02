@@ -9,7 +9,7 @@ sidebar: htmlsidebar
 
 The `preload` value of the {{htmlelement("link")}} element's [`rel`](/en-US/docs/Web/HTML/Reference/Elements/link#rel) attribute lets you declare fetch requests in the
 HTML's {{htmlelement("head")}}, specifying resources that your page will need very soon, which you want to start loading early in the page lifecycle,
-before browsers' main rendering machinery kicks in. This ensures they are available earlier and are less likely to block the page's render, improving performance. Even though the name contains the term _load_, it doesn't load and execute the script but only schedules it to be downloaded and cached with a higher priority.
+before browsers' main rendering machinery kicks in. This ensures they are available earlier and are less likely to block the page's render, improving performance. Even though the name contains the term _load_, it doesn't load and execute the script but only schedules it to be downloaded and cached. Browsers set the priority of that request based on the type of resource given in the [`as`](/en-US/docs/Web/HTML/Reference/Elements/link#as) attribute, and the [`fetchpriority`](/en-US/docs/Web/HTML/Reference/Attributes/fetchpriority) attribute can raise or lower it.
 
 ## The basics
 
