@@ -76,6 +76,45 @@ const observer = new PerformanceObserver((list) => {
 observer.observe({ type: "layout-shift", buffered: true });
 ```
 
+### Calculating CLS
+
+The following example calculates the {{glossary("CLS")}} score for the current document. Layout shifts without recent user input are grouped into session windows. A shift joins the current window if it happens less than 1 second after the previous shift and less than 5 seconds after the first shift in the window, and otherwise starts a new window. The CLS score is the largest window score.
+
+```js
+let clsScore = 0;
+let sessionScore = 0;
+let sessionStartTime;
+let previousShiftTime;
+
+const observer = new PerformanceObserver((list) => {
+  for (const entry of list.getEntries()) {
+    // Only count layout shifts without recent user input
+    if (entry.hadRecentInput) {
+      continue;
+    }
+
+    if (
+      previousShiftTime !== undefined &&
+      entry.startTime - previousShiftTime < 1000 &&
+      entry.startTime - sessionStartTime < 5000
+    ) {
+      sessionScore += entry.value;
+    } else {
+      sessionScore = entry.value;
+      sessionStartTime = entry.startTime;
+    }
+    previousShiftTime = entry.startTime;
+
+    clsScore = Math.max(clsScore, sessionScore);
+  }
+  console.log("CLS:", clsScore);
+});
+
+observer.observe({ type: "layout-shift", buffered: true });
+```
+
+A `PerformanceObserver` does not receive layout shifts from child frames, so this score does not include them.
+
 ## Specifications
 
 {{Specifications}}
